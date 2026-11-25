@@ -1,0 +1,1 @@
+Warcraft III has a Custom Maps menu to import and delete .w3x and .w3m map files without changing the engine.

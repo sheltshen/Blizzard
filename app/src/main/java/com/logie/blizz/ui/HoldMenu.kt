@@ -102,6 +102,9 @@ internal fun HoldMenu(game: Game, onDismiss: () -> Unit) {
             var classicPlus by remember { mutableStateOf(false) }
             if (warsmash) HoldItem(Icons.Default.AutoAwesome, "Classic+ models") { classicPlus = true }
             if (classicPlus) ClassicPlusDialog { classicPlus = false; onDismiss() }
+            var customMaps by remember { mutableStateOf(false) }
+            if (warsmash) HoldItem(Icons.Default.Storage, "Custom Maps") { customMaps = true }
+            if (customMaps) CustomMapsDialog(effective.id) { customMaps = false }
             HoldItem(Icons.Default.Image, "Art") { onDismiss(); openSplash(game) }
             val openMusic = LocalOpenMusic.current
             HoldItem(Icons.Default.MusicNote, "Music") { onDismiss(); openMusic(game) }

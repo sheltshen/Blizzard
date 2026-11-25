@@ -155,14 +155,16 @@ jobs:
           BLIZZ_REPORT_TOKEN: ${{ secrets.BLIZZ_REPORT_TOKEN }}
         run: >
           ./gradlew :app:assembleDebug --no-daemon
-          -PblizzVersionCode=${{ github.run_number }} -PblizzVersionName=1.0.${{ github.run_number }}
+          -PblizzVersionCode=$((10000 + ${{ github.run_number }})) -PblizzVersionName=1.0.$((10000 + ${{ github.run_number }})) -PblizzUpdateRepo=sheltshen/Blizzard
           -PblizzReportToken="$BLIZZ_REPORT_TOKEN"
       - name: Run the unit tests
         if: matrix.task == 'test'
         run: >
           ./gradlew :app:testDebugUnitTest --no-daemon -PtestForks=3
-          -PblizzVersionCode=${{ github.run_number }} -PblizzVersionName=1.0.${{ github.run_number }}
-      - run: cp app/build/outputs/apk/debug/app-debug.apk Blizzard.apk
+          -PblizzVersionCode=$((10000 + ${{ github.run_number }})) -PblizzVersionName=1.0.$((10000 + ${{ github.run_number }})) -PblizzUpdateRepo=sheltshen/Blizzard
+      - run: |
+          cp app/build/outputs/apk/debug/app-debug.apk Blizzard.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs Blizzard.apk
         if: matrix.task == 'assemble'
       - uses: actions/upload-artifact@v4
         if: matrix.task == 'assemble'
@@ -198,7 +200,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: >
-          gh release create "blizzard-build-${{ github.run_number }}" Blizzard.apk
+          gh release create "blizzard-build-$((10000 + ${{ github.run_number }}))" Blizzard.apk
           --repo "${{ github.repository }}"
-          --target "${{ github.sha }}" --title "Blizzard 1.0.${{ github.run_number }}"
+          --target "${{ github.sha }}" --title "Blizzard 1.0.$((10000 + ${{ github.run_number }}))"
           --notes-file release-notes.md
