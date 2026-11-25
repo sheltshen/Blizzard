@@ -41,13 +41,17 @@ jobs:
           cache-read-only: ${{ matrix.task == 'test' || !endsWith(format('{0}', github.run_number), '0') }}
 
       # The runner's own Android SDK; Winlator's native code and the tools need the NDK and CMake.
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platform-tools"
+          log-accepted-android-sdk-licenses: false
       - name: Install build tools
         # Both legs: the unit tests build no native code of their own, but the shared Winlator, importers'
         # programs and Stratagus steps do when their caches are cold (e.g. after a change under tools/),
         # and that happens in the test leg too, so it needs the NDK and CMake as well.
         run: |
-          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-35" "build-tools;35.0.0" \
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager --install "platforms;android-35" "build-tools;35.0.0" \
             "ndk;24.0.8215888" "cmake;3.22.1" > /dev/null
 
       - name: Look for Winlator
