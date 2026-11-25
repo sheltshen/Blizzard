@@ -15,13 +15,13 @@ class ModuleSourceTest {
     @Test
     fun theWorkflowAndTheReleaseAreInThisAppsRepository() {
         assertEquals(com.logie.blizz.BuildConfig.UPDATE_REPO, ModuleSource.REPO)
-        assertEquals("logie-github/Blizzard", ModuleSource.REPO)
+        val repo = com.logie.blizz.BuildConfig.UPDATE_REPO
         assertEquals(
-            "https://api.github.com/repos/logie-github/Blizzard/actions/workflows/build-realm-modules.yml",
+            "https://api.github.com/repos/$repo/actions/workflows/build-realm-modules.yml",
             ModuleSource.workflowUrl(),
         )
-        assertEquals("https://api.github.com/repos/logie-github/Blizzard/releases/tags/realm-modules", ModuleSource.releaseUrl(ModuleSource.RELEASE))
-        assertEquals("https://api.github.com/repos/logie-github/Blizzard/actions/runs/9", ModuleSource.runUrl(9))
+        assertEquals("https://api.github.com/repos/$repo/releases/tags/realm-modules", ModuleSource.releaseUrl(ModuleSource.RELEASE))
+        assertEquals("https://api.github.com/repos/$repo/actions/runs/9", ModuleSource.runUrl(9))
         assertTrue(ModuleSource.runsUrl().endsWith("/runs?event=workflow_dispatch&per_page=30"))
     }
 

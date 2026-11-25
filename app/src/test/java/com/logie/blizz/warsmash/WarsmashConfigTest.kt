@@ -19,4 +19,16 @@ class WarsmashConfigTest {
         assertTrue(config.contains("Count=6"))
         assertTrue(config.contains("Path05=${support.absolutePath}"))
     }
+    @Test fun downloadedMapsAreExposedAsBareNamesWithoutMovingFiles() {
+        val game = tmp.newFolder("game")
+        File(game, "war3.mpq").writeText("fixture")
+        val support = tmp.newFolder("resources")
+        val imported = ImportedMaps.import(game, "DotA.w3x", "HM3Wsample".byteInputStream())
+        val config = WarsmashConfig.sources(game, support)
+        assertTrue(config.contains("Count=5"))
+        assertTrue(config.contains("Path03=${ImportedMaps.directory(game).absolutePath}\n"))
+        assertTrue(config.contains("Path04=${support.absolutePath}\n"))
+        assertTrue(imported.exists())
+        assertEquals(listOf(imported), ImportedMaps.list(game))
+    }
 }

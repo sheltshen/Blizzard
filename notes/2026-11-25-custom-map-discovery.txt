@@ -1,0 +1,1 @@
+Imported Warcraft III maps are exposed directly to the game map picker, including maps previously imported into Maps/Download.

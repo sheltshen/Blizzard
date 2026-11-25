@@ -12,6 +12,8 @@ object WarsmashConfig {
         val present = game.listFiles().orEmpty().filter { it.isFile }.associateBy { it.name.lowercase() }
         val layers = archives.mapNotNull { present[it]?.let { f -> "MPQ" to f } } +
             listOf("Folder" to game, "Folder" to File(game, "Maps")) +
+            // The map picker lists bare filenames; expose imported maps without their Download/ prefix.
+            listOfNotNull(ImportedMaps.directory(game).takeIf { it.isDirectory }?.let { "Folder" to it }) +
             listOfNotNull(extra?.takeIf { it.isDirectory }?.let { "Folder" to it }) +
             listOf("Folder" to support)
         return buildString {
